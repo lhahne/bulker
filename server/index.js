@@ -16,6 +16,7 @@ passport.deserializeUser(function(user, done) {
 });
 
 server.use(session({secret: process.env.SESSION_SECRET || 'adsfdsfga'}));
+server.use(express.static('client'));
 
 server.use(passport.initialize());
 server.use(passport.session());
@@ -31,12 +32,6 @@ passport.use(new FitbitStrategy({
         done(null, {token: accessToken});
     }
 ));
-
-
-server.get('/', (req, res, next) => {
-   res.send('hi');
-    next();
-});
 
 server.get('/auth/login',
     passport.authenticate('fitbit', {scope: ['weight', 'profile']}));
