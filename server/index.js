@@ -63,7 +63,7 @@ server.get('/data', (req, res) => {
     });
 });
 
-const port = 9000;
+const port = process.env.PORT || 9000;
 
 server.listen(port, () => {
     console.log(`${server.name} listening at ${server.url}`);
