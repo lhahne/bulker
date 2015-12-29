@@ -20,10 +20,12 @@ server.use(session({secret: process.env.SESSION_SECRET || 'adsfdsfga'}));
 server.use(passport.initialize());
 server.use(passport.session());
 
+const host = process.env.HOST || 'http://localhost:9000';
+
 passport.use(new FitbitStrategy({
         clientID:     process.env.ID,
         clientSecret: process.env.SECRET,
-        callbackURL: "http://localhost:9000/auth/callback"
+        callbackURL: host + "/auth/callback"
     },
     function(accessToken, refreshToken, profile, done) {
         done(null, {token: accessToken});
