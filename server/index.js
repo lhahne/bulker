@@ -3,6 +3,7 @@ const express = require('express');
 const FitbitStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy;
 const https = require('https');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const axios = require('axios');
 
 const server = express();
@@ -15,7 +16,15 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 });
 
-server.use(session({secret: process.env.SESSION_SECRET || 'adsfdsfga'}));
+const store = new MongoDBStore({
+    uri: 'mongodb://localhost/bulker',
+    collection: 'sessions'
+});
+
+server.use(session({
+    secret: process.env.SESSION_SECRET || 'adsfdsfga',
+    store
+}));
 server.use(express.static('client'));
 
 server.use(passport.initialize());
@@ -46,9 +55,13 @@ server.get('/auth/callback',
     }
 );
 
-server.get('/data', (req, res) => {
+server.get('/user', (req, res) => {
 
-    axios.get('https://api.fitbit.com/1/user/-/profile.json', {
+    res.send({
+        token: req.user.token
+    });
+
+/*    axios.get('https://api.fitbit.com/1/user/-/profile.json', {
         headers: {
             Authorization: 'Bearer ' + req.user.token
         }
@@ -56,7 +69,7 @@ server.get('/data', (req, res) => {
         res.send(response.data);
     }).catch(e => {
         console.log(e);
-    });
+    });*/
 });
 
 const port = process.env.PORT || 9000;
