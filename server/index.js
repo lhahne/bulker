@@ -56,20 +56,9 @@ server.get('/auth/callback',
 );
 
 server.get('/user', (req, res) => {
-
     res.send({
         token: req.user.token
     });
-
-/*    axios.get('https://api.fitbit.com/1/user/-/profile.json', {
-        headers: {
-            Authorization: 'Bearer ' + req.user.token
-        }
-    }).then(response => {
-        res.send(response.data);
-    }).catch(e => {
-        console.log(e);
-    });*/
 });
 
 const port = process.env.PORT || 9000;
