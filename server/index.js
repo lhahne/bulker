@@ -58,8 +58,7 @@ server.get('/data', (req, res) => {
             Authorization: 'Bearer ' + req.user.token
         }
     }).then(response => {
-        console.log(response);
-        res.send(response);
+        res.send(response.data);
     }).catch(e => {
         console.log(e);
     });
