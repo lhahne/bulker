@@ -33,7 +33,7 @@ passport.use(new FitbitStrategy({
     }
 ));
 
-server.get('/auth/login',
+server.get('/',
     passport.authenticate('fitbit', {scope: ['weight', 'profile']}));
 
 server.get('/auth/callback',
@@ -42,7 +42,7 @@ server.get('/auth/callback',
         // Successful authentication, redirect home.
         console.log('at callback callback');
         console.log(req.user);
-        res.redirect('/data');
+        res.redirect('/app.html');
     }
 );
 
