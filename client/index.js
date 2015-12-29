@@ -4,7 +4,7 @@ System.import('angular@1.4.8').then(function(angular) {
     angular.module('bulkken', [])
         .controller('bulkController', function($scope, $http) {
             $http.get('/data').then(function(success) {
-                console.log(success.data);
+                $scope.data = success.data
             }, function(fail) {
                 console.log(fail);
             });
