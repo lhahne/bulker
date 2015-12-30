@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel-node": "babel-node",
-    "dev": "nodemon --exec npm run babel-node -- server/index.js",
+    "dev": "nodemon --ignore client --ignore public --exec npm run babel-node -- server/index.js",
     "start": "node index.js",
     "build": "browserify client/index.js -g uglifyify -t babelify -o public/app.js",
     "watch": "watchify client/index.js -t babelify -v -o public/app.js"
@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/lhahne/bulker#readme",
   "dependencies": {
-    "angular": "^1.4.8",
     "axios": "^0.8.1",
     "babel-cli": "^6.3.17",
     "babel-preset-es2015": "^6.3.13",
@@ -35,6 +34,7 @@
     "nodemon": "^1.8.1",
     "passport": "^0.3.2",
     "passport-fitbit-oauth2": "^1.0.1",
+    "rx": "^4.0.7",
     "uglifyify": "^3.0.1",
     "watchify": "^3.6.1"
   }

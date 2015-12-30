@@ -1,20 +1,10 @@
-require("angular");
+const rx = require('rx');
+const axios = require('axios')
 
-console.log('loaded');
+const token = rx.Observable.fromPromise(axios.get('/user'))
+    .map(response => response.data.token);
 
-angular.module('bulkken', [])
-    .controller('bulkController', function($scope, $http) {
+const profile = token.flatMap(token => rx.Observable.fromPromise(axios.get('https://api.fitbit.com/1/user/-/profile.json', {headers: {Authorization: 'Bearer ' + token}})))
+    .map(response => response.data.user)
+    .subscribe(v => console.log(v));
 
-        let user;
-
-        $http.get('/user').then(function(success) {
-            user = success.data
-            $http.get('https://api.fitbit.com/1/user/-/profile.json', {
-                headers: {
-                    Authorization: 'Bearer ' + user.token
-                }
-            }).then(function(success) {
-                $scope.data = success.data;
-            });
-        });
-    });
