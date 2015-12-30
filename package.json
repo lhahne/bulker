@@ -10,7 +10,7 @@
     "start": "node index.js",
     "build": "browserify client/index.js -g uglifyify -t babelify -o public/app.js",
     "watch": "watchify client/index.js -t babelify -v -o public/app.js",
-    "prepublish": "npm run build"
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
