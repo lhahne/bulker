@@ -9,7 +9,8 @@
     "dev": "nodemon --ignore client --ignore public --exec npm run babel-node -- server/index.js",
     "start": "node index.js",
     "build": "browserify client/index.js -g uglifyify -t babelify -o public/app.js",
-    "watch": "watchify client/index.js -t babelify -v -o public/app.js"
+    "watch": "watchify client/index.js -t babelify -v -o public/app.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
