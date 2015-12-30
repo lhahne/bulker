@@ -16,8 +16,9 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 });
 
+const mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost/bulker';
 const store = new MongoDBStore({
-    uri: 'mongodb://localhost/bulker',
+    uri: mongoUri,
     collection: 'sessions'
 });
 
