@@ -17,7 +17,7 @@ function sortItems(items) {
 
 const WeightItem = React.createClass({
     render() {
-        const makeItem = item => <li key={item._id}>Weight {item.weight},Waist {item.waist}</li>
+        const makeItem = item => <li key={item._id}>Weight {item.weight}, Waist {item.waist} <i>{item.time.toISOString()}</i></li>
         return <ul>{this.props.items.map(makeItem)}</ul>;
     }
 });
