@@ -67,6 +67,12 @@ server.get('/user', (req, res) => {
     });
 });
 
+const pushMeasurements = user => {
+    db.measurements.find({user}).toArray((err, res) => {
+        io.to(user).emit('measurements', res);
+    });
+};
+
 server.post('/data', (req, res) => {
     const datapoint = {
         user: req.body.user,
@@ -74,16 +80,10 @@ server.post('/data', (req, res) => {
         time: new Date(req.body.time)
     };
     db.measurements.insert(datapoint, (err, item) => {
+        pushMeasurements(datapoint.user);
         res.send(item);
     });
 });
-
-const pushMeasurements = user => {
-    db.measurements.find({user}).toArray((err, res) => {
-        console.log(res);
-        io.to(user).emit('measurements', res);
-    });
-};
 
 io.on('connection', socket => {
     console.log('a user connected');
