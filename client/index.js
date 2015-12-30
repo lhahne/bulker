@@ -28,7 +28,6 @@ profile$.subscribe(profile => {
 const measurements$ = new rx.Subject();
 
 io.on('measurements', msg => {
-    console.log(msg);
     measurements$.onNext(msg);
 });
 

@@ -19,7 +19,6 @@ module.exports = function(weightData$) {
         },
         componentDidMount() {
             weightData$.subscribe(state => {
-                log.info(state);
                 this.setState({items: state});
             });
         },
