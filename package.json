@@ -36,6 +36,7 @@
     "express-session": "^1.12.1",
     "loglevel": "^1.4.0",
     "mongodb": "^2.1.2",
+    "mongoskin": "^2.0.3",
     "nodemon": "^1.8.1",
     "passport": "^0.3.2",
     "passport-fitbit-oauth2": "^1.0.1",

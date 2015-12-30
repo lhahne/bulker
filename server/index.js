@@ -6,6 +6,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const mongo = require('mongoskin');
 
 const server = express();
 
@@ -22,6 +23,8 @@ const store = new MongoDBStore({
     uri: mongoUri,
     collection: 'sessions'
 });
+const db = mongo.db(mongoUri, {nativeParser: true});
+db.bind('measurements');
 
 server.use(bodyParser.json());
 server.use(session({
@@ -65,8 +68,14 @@ server.get('/user', (req, res) => {
 });
 
 server.post('/data', (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
+    const datapoint = {
+        user: req.body.user,
+        waist: req.body.waist,
+        time: new Date(req.body.time)
+    };
+    db.measurements.insert(datapoint, (err, item) => {
+        res.send(item);
+    })
 });
 
 const port = process.env.PORT || 9000;

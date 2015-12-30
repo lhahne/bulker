@@ -36,7 +36,7 @@ const DataView = React.createClass({
     submitNewData(event) {
         const waist = event.target[0].value;
         const user = this.state.profile.encodedId;
-        axios.post('/data', {waist, user});
+        axios.post('/data', {waist, user, time: new Date()});
         event.preventDefault();
     },
     render() {
