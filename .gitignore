@@ -33,3 +33,5 @@ node_modules
 .idea
 
 run.sh
+
+public/*.js

@@ -25,7 +25,7 @@ server.use(session({
     secret: process.env.SESSION_SECRET || 'adsfdsfga',
     store
 }));
-server.use(express.static('client'));
+server.use(express.static('public'));
 
 server.use(passport.initialize());
 server.use(passport.session());
@@ -64,5 +64,5 @@ server.get('/user', (req, res) => {
 const port = process.env.PORT || 9000;
 
 server.listen(port, () => {
-    console.log(`${server.name} listening at ${server.url}`);
+    console.log(`server running on port ${port}`);
 });
