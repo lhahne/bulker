@@ -25,46 +25,15 @@ profile$.subscribe(profile => {
     io.emit('activate', {user: profile.encodedId});
 });
 
+const measurements$ = new rx.Subject();
+
 io.on('measurements', msg => {
     console.log(msg);
+    measurements$.onNext(msg);
 });
 
-const InputView = React.createClass({
-    getInitialState() {
-        return {};
-    },
-    componentDidMount() {
-        rx.Observable.combineLatest(profile$, weightData$, (profile, weightData) => {
-            log.info(profile);
-            log.info(weightData);
-            return {
-                profile,
-                weightData
-            }
-        }).subscribe(state => this.setState(state));
-    },
-    submitNewData(event) {
-        const waist = event.target[0].value;
-        const user = this.state.profile.encodedId;
-        axios.post('/data', {waist, user, time: new Date()});
-        event.preventDefault();
-    },
-    render() {
-        const displayWeight = data => {
-            if (data)
-             return <p>Weight today {data.weight}</p>;
-        };
+const InputView = require('./InputView')(profile$, weightData$);
+const MeasurementView = require('./MeasurementView')(measurements$);
 
-        return (
-            <div>
-                {displayWeight(this.state.weightData)}
-                <form onSubmit={this.submitNewData}>
-                    <p>Waist <input type="text" /></p>
-                    <input type="submit" />
-                </form>
-            </div>
-        );
-    }
-});
-
-ReactDOM.render(<InputView />, document.getElementById('root'));
+ReactDOM.render(<InputView />, document.getElementById('inputView'));
+ReactDOM.render(<MeasurementView />, document.getElementById('measurementView'));

@@ -77,6 +77,7 @@ server.post('/data', (req, res) => {
     const datapoint = {
         user: req.body.user,
         waist: req.body.waist,
+        weight: req.body.weight,
         time: new Date(req.body.time)
     };
     db.measurements.insert(datapoint, (err, item) => {
