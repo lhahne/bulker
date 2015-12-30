@@ -9,7 +9,7 @@ const log = require('./logger');
 const token = rx.Observable.fromPromise(axios.get('/user'))
     .map(response => response.data.token);
 
-const get = path => token.flatMap(token => rx.Observable.fromPromise(axios.get(`https://api.fitbit.com${path}`, {headers: {Authorization: 'Bearer ' + token}})))
+const get = path => token.flatMap(token => rx.Observable.fromPromise(axios.get(`https://api.fitbit.com${path}`, {headers: {Authorization: 'Bearer ' + token}})));
 
 const profile = get('/1/user/-/profile.json')
     .map(response => response.data.user);
