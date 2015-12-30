@@ -2,8 +2,18 @@ const rx = require('rx');
 const React = require('react');
 
 const axios = require('axios');
-
+const _ = require('lodash');
 const log = require('./logger');
+
+function sortItems(items) {
+    return _.chain(items)
+        .map(i => {
+            i.time = new Date(i.time)
+            return i;
+        })
+        .sortByOrder(['time'], ['desc'])
+        .value();
+}
 
 const WeightItem = React.createClass({
     render() {
@@ -18,8 +28,8 @@ module.exports = function(weightData$) {
             return {items: []};
         },
         componentDidMount() {
-            weightData$.subscribe(state => {
-                this.setState({items: state});
+            weightData$.subscribe(items => {
+                this.setState({items: sortItems(items)});
             });
         },
         render() {
