@@ -1,7 +1,6 @@
 const passport = require('passport');
 const express = require('express');
 const FitbitStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy;
-const https = require('https');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const axios = require('axios');
@@ -9,6 +8,9 @@ const bodyParser = require('body-parser');
 const mongo = require('mongoskin');
 
 const server = express();
+
+const http = require('http').Server(server);
+const io = require('socket.io')(http);
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -54,8 +56,6 @@ server.get('/',
 server.get('/auth/callback',
     passport.authenticate('fitbit', { failureRedirect: '/login' }),
     function(req, res) {
-        // Successful authentication, redirect home.
-        console.log('at callback callback');
         console.log(req.user);
         res.redirect('/app.html');
     }
@@ -75,11 +75,31 @@ server.post('/data', (req, res) => {
     };
     db.measurements.insert(datapoint, (err, item) => {
         res.send(item);
+    });
+});
+
+const pushMeasurements = user => {
+    db.measurements.find({user}).toArray((err, res) => {
+        console.log(res);
+        io.to(user).emit('measurements', res);
+    });
+};
+
+io.on('connection', socket => {
+    console.log('a user connected');
+
+    socket.on('activate', message => {
+        socket.join(message.user);
+        pushMeasurements(message.user);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('a user disconnected');
     })
 });
 
 const port = process.env.PORT || 9000;
 
-server.listen(port, () => {
+http.listen(port, () => {
     console.log(`server running on port ${port}`);
 });

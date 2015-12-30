@@ -4,6 +4,8 @@ const axios = require('axios');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const io = require('socket.io-client')();
+
 const log = require('./logger');
 
 const token$ = rx.Observable.fromPromise(axios.get('/user'))
@@ -18,6 +20,14 @@ const today = new Date().toISOString().substr(0, 10);
 
 const weightData$ = get$(`/1/user/-/body/log/weight/date/${today}.json`)
     .map(response => response.data.weight[0]);
+
+profile$.subscribe(profile => {
+    io.emit('activate', {user: profile.encodedId});
+});
+
+io.on('measurements', msg => {
+    console.log(msg);
+});
 
 const DataView = React.createClass({
     getInitialState() {
