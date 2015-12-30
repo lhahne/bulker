@@ -18,4 +18,3 @@ angular.module('bulkken', [])
             });
         });
     });
-
