@@ -29,7 +29,7 @@ io.on('measurements', msg => {
     console.log(msg);
 });
 
-const DataView = React.createClass({
+const InputView = React.createClass({
     getInitialState() {
         return {};
     },
@@ -67,4 +67,4 @@ const DataView = React.createClass({
     }
 });
 
-ReactDOM.render(<DataView />, document.getElementById('root'));
+ReactDOM.render(<InputView />, document.getElementById('root'));
