@@ -4,6 +4,8 @@ const axios = require('axios');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const log = require('./logger');
+
 const token = rx.Observable.fromPromise(axios.get('/user'))
     .map(response => response.data.token);
 
@@ -22,13 +24,16 @@ const DataView = React.createClass({
         return {};
     },
     componentDidMount() {
-        weightData.subscribe(data => this.setState({data}));
+        weightData.subscribe(data => {
+            log.info(data);
+            this.setState({data})
+        });
     },
     render() {
         const displayData = data => {
             if (data)
              return <p>Weight today {this.state.data.weight}</p>;
-        }
+        };
 
         return (
             <div>
