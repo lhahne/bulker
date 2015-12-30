@@ -5,6 +5,7 @@ const https = require('https');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const axios = require('axios');
+const bodyParser = require('body-parser');
 
 const server = express();
 
@@ -22,6 +23,7 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 
+server.use(bodyParser.json());
 server.use(session({
     secret: process.env.SESSION_SECRET || 'adsfdsfga',
     store
@@ -60,6 +62,11 @@ server.get('/user', (req, res) => {
     res.send({
         token: req.user.token
     });
+});
+
+server.post('/data', (req, res) => {
+    console.log(req.body);
+    res.send(req.body);
 });
 
 const port = process.env.PORT || 9000;

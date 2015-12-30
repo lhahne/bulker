@@ -24,20 +24,34 @@ const DataView = React.createClass({
         return {};
     },
     componentDidMount() {
-        weightData$.subscribe(data => {
-            log.info(data);
-            this.setState({data})
-        });
+        rx.Observable.combineLatest(profile$, weightData$, (profile, weightData) => {
+            log.info(profile);
+            log.info(weightData);
+            return {
+                profile,
+                weightData
+            }
+        }).subscribe(state => this.setState(state));
+    },
+    submitNewData(event) {
+        const waist = event.target[0].value;
+        const user = this.state.profile.encodedId;
+        axios.post('/data', {waist, user});
+        event.preventDefault();
     },
     render() {
-        const displayData = data => {
+        const displayWeight = data => {
             if (data)
-             return <p>Weight today {this.state.data.weight}</p>;
+             return <p>Weight today {data.weight}</p>;
         };
 
         return (
             <div>
-                {displayData(this.state.data)}
+                {displayWeight(this.state.weightData)}
+                <form onSubmit={this.submitNewData}>
+                    <p>Waist <input type="text" /></p>
+                    <input type="submit" />
+                </form>
             </div>
         );
     }
